@@ -1,0 +1,35 @@
+nav {
+  background-color: #fff;
+
+  ul.left{
+    .collapse-horizontal {
+      transition: width 0.1s ease !important;
+    }
+  }
+
+  .middle {
+    .blog-header-logo {
+      font-family: "Playfair Display", Georgia, "Times New Roman", serif /* rtl:Amiri, Georgia, "Times New Roman", serif */;
+      font-size: 2.25rem;
+    }
+  }
+  
+  ul.right{
+    .account {
+      .dropdown-menu {
+        display: none;
+        
+        .dropdown-item:hover {
+          background-color: rgba(33, 158, 188); 
+          color: white; 
+        }
+      }
+      
+    }  
+    .account:hover {
+      .dropdown-menu {
+        display: block;
+      }
+    }  
+  }
+}
