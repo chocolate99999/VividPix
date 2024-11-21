@@ -54,13 +54,13 @@ nav ul.right .account:hover .dropdown-menu {
 
 .loginUi {
   height: 87vh;
-  outline: 1px solid red;
 }
 
 .form-signin {
   max-width: 330px;
   padding: 1rem;
-  outline: 1px solid blue;
+  height: 82vh;
+  outline: 1px solid gray;
 }
 
 .form-signin .form-floating:focus-within {
@@ -77,4 +77,61 @@ nav ul.right .account:hover .dropdown-menu {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+/* 預設白天模式，Logo 為黑色 */
+[data-bs-theme=light] .logo {
+  filter: invert(0%);
+}
+
+/* 黑暗模式，Logo 為白色 */
+[data-bs-theme=dark] .logo {
+  filter: invert(100%);
+}
+
+/* 自動模式根據系統設定切換 */
+[data-bs-theme=auto] .logo {
+  filter: invert(50%); /* 過渡效果，根據需要調整 */
+}
+
+.registerUi {
+  height: 87vh;
+}
+
+.form-signup {
+  max-width: 330px;
+  padding: 1rem;
+  height: 82vh;
+  outline: 1px solid gray;
+}
+
+.form-signup .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signup input[type=email] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signup input[type=password] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* 預設白天模式，Logo 為黑色 */
+[data-bs-theme=light] .logo {
+  filter: invert(0%);
+}
+
+/* 黑暗模式，Logo 為白色 */
+[data-bs-theme=dark] .logo {
+  filter: invert(100%);
+}
+
+/* 自動模式根據系統設定切換 */
+[data-bs-theme=auto] .logo {
+  filter: invert(50%); /* 過渡效果，根據需要調整 */
 }/*# sourceMappingURL=style.css.map */

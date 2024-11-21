@@ -140,11 +140,21 @@ const Nav = ({ currentUser, setCurrentUser }) => {
                 <circle cx="12" cy="8" r="4" />
                 <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
               </svg>
-              <span>Account</span>
+
+              {!currentUser && (
+                <span>Account</span>
+              )}
+
+              {currentUser && (
+                <div className="d-flex flex-column position-relative text-center mb-3">
+                  <p className="fw-bold mb-3">{currentUser.user.username}</p>
+                  <span style={{ marginTop: '-25px'}}>Account</span>
+                </div>               
+              )}
             </Link>
             
             {/* <!-- Collapsible dropdown menu --> */}
-            <div className="collapse position-absolute dropdown-menu p-2" id="accountMenu" style={{top: "100%", left: "-68%"}}>
+            <div className="collapse position-absolute dropdown-menu p-2" id="accountMenu" style={{ top: "100%", left: "-75%" }}>
               {!currentUser && (
                 <Link className="dropdown-item text-decoration-none d-flex align-items-center" to="/login">
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="me-2" viewBox="0 0 24 24">                   
@@ -179,7 +189,7 @@ const Nav = ({ currentUser, setCurrentUser }) => {
              
               {currentUser && (
                 <Link onClick={handleLogout} className="dropdown-item text-decoration-none d-flex align-items-center" to="/">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="me-2" viewBox="0 0 24 24">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="me-2" viewBox="0 0 24 24">
                     <title>Sign Out</title>
                     <path d="M5 3h8M5 3v18M5 21h8" />
                     <path d="M12 12H21" />

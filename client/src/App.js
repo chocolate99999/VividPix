@@ -14,7 +14,6 @@ import Checkout from './components/Checkout';
 import AuthService from './services/auth.service';
 
 import './styles/style.css';
-import { initializeThemeSwitcher, setTheme, getPreferredTheme } from './js/color-modes.js';
 
 function App() {
   let [currentUser, setCurrentUser] = useState(AuthService.getCurrentUser());

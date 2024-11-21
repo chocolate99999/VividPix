@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import AuthService from '../services/auth.service';
 
 import { initializeThemeSwitcher, setTheme, getPreferredTheme } from '../js/color-modes.js';
-//Neil-DBG-e
+
 
 const Login = ({ currentUser, setCurrentUser }) => {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ const Login = ({ currentUser, setCurrentUser }) => {
 
   return (
 
-    <div className="loginUi d-flex align-items-center" data-bs-theme="auto">
+    <div className="loginUi d-flex align-items-center">
       <svg xmlns="http://www.w3.org/2000/svg" className="d-none">
         <symbol id="check2" viewBox="0 0 16 16">
           <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
@@ -88,21 +88,20 @@ const Login = ({ currentUser, setCurrentUser }) => {
           </li>
         </ul>
       </div>
-
     
       <div className="form-signin w-100 m-auto">
-        <form>
-          <img className="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"/>
+        <div className="text-center">
+          <img className="mb-0 logo" src="logo.png" alt="" width="72" height="72"/>
           <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
 
           <div className="form-floating">
-            <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com"/>
-            <label for="floatingInput">Email address</label>
+            <input onChange={handleEmail} name="email" type="text" className="form-control" id="floatingInput" placeholder="name@example.com"/>
+            <label htmlFor="username" for="floatingInput">Email address</label>
           </div>
 
           <div className="form-floating">
-            <input type="password" className="form-control" id="floatingPassword" placeholder="Password"/>
-            <label for="floatingPassword">Password</label>
+            <input onChange={handlePassword} name="password" type="password" className="form-control" id="floatingPassword" placeholder="Password"/>
+            <label htmlFor="password" for="floatingPassword">Password</label>
           </div>
 
           <div className="form-check text-start my-3">
@@ -110,29 +109,13 @@ const Login = ({ currentUser, setCurrentUser }) => {
             <label className="form-check-label" for="flexCheckDefault">Remember me</label>            
           </div>
 
-          <button className="btn btn-primary w-100 py-2" type="submit">Sign in</button>
-          <p className="mt-5 mb-3 text-body-secondary">&copy; 2024</p>
-        </form>
+          <button onClick={handleLogin} className="btn btn-primary w-100 py-2">Sign in</button>
+          {message && <div className="alert alert-danger mt-1">{message}</div>}
+          <p className="mt-4 text-body-secondary">&copy; 2024 Sharon Huang</p>
+        </div>
       </div>
   
-    </div>
-
-
-   
-
-
-
-   
-
-
-
-
-
-
-
-
-
-    
+    </div>   
   );
 };
 

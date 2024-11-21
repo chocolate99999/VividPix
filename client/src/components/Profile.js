@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import AuthService from '../services/auth.service';
 
 const Profile = ({ currentUser, setCurrentUser }) => {
-  
+
   // useEffect(() => {
   //   setCurrentUser(AuthService.getCurrentUser());
   // }, []);
