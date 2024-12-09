@@ -1,79 +1,121 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; 
 import AuthService from '../services/auth.service';
 
+import { useNavigate, useSearchParams } from "react-router-dom";
+
 const Nav = ({ currentUser, setCurrentUser }) => {
+  const navigate = useNavigate();
+  let [input, setInput] = useState("");
+  let [currentSearch, setCurrentSearch] = useState(""); 
+  let [navInput, setNavInput] = useState(""); 
+  let [navCurrentSearch, setNavCurrentSearch] = useState("");
+  let [searchParams, setSearchParams] = useSearchParams();
+ 
+  const handleNavInput = (e) => {
+    setNavInput(e.target.value);
+  };
+
+  let addQueryParam = (key, value) => {   
+    console.warn("[Neil-DBG] 2");
+    searchParams.set(key, value);
+    console.warn("[Neil-DBG] 3");
+    setSearchParams(searchParams); // 更新 URL
+    return searchParams.toString();
+  }
+
+  // const removeQueryParam = () => {
+  //   searchParams.delete("input"); // 刪除 input 參數
+  //   setSearchParams(searchParams); // 更新 URL
+  //   console.log("[後]searchParams :", `${searchParams.toString()}`); // ""
+  //   navigate(`/`, { replace: true });
+  // };
+
+  // 獲取 URL 中的 input 參數
+  let checkQueryParams = () => {
+    const urlInputParam = searchParams.get("input");
+    return urlInputParam;
+  };
+
+  let urlInputParam = checkQueryParams();
+
+  // Enter 功能 
+  const handleNavKeyDown  = async (e) => {
+    if (e.key === 'Enter') 
+    {
+      console.log('Nav search API called');
+      console.log("urlInputParam", urlInputParam);
+      console.log("!urlInputParam", !urlInputParam);
+
+      //[BUG] if (!urlInputParam){添加 網址 input 參數、清空ES值、search(變更URL)、設定 navCurrentSearch 值} 
+      // else{進入頁面直接 Nav Search}
+      if (!urlInputParam){
+        console.log("狀態: url 沒有 input 參數時! ===== 檢驗方法 : 由 Explore Search 後，轉而 Nav Search =====");
+
+        setInput(input = ""); 
+        setCurrentSearch(setCurrentSearch = currentSearch); // 清空 currentSearch
+
+        let addInputParam = addQueryParam("input", navInput);
+        console.log("addInputParam : ", addInputParam); // 實: input=cat
+
+        // navigate(`/explore?${addInputParam}`, { replace: true });
+
+        navigate(`/`, { replace: true });
+
+        if (addInputParam) {
+          // 使用 Promise 延遲確保狀態同步後再跳轉
+          setTimeout(() => {
+            console.log("跳轉到：", `/explore?${addInputParam}`);
+            navigate(`/explore?${addInputParam}`, { replace: true });
+          }, 0);
+        }
+      }
+      else if(urlInputParam){
+        console.log("狀態: url 有 input 參數時! ===== 檢驗方法 : 進入頁面後，連續重複使用 Nav Search =====");
+
+        setNavCurrentSearch(navCurrentSearch = navInput);
+        console.log("navCurrentSearch : ", navCurrentSearch);    // 預 : star 實: star
+        let updateInputParam = addQueryParam("input", navInput);
+        console.log("updateInputParam : ", updateInputParam);    // 預 : input=star 實: input=star
+
+        navigate(`/`, { replace: true });
+
+        if (updateInputParam) {
+          // 使用 Promise 延遲確保狀態同步後再跳轉
+          setTimeout(() => {
+            console.log("跳轉到：", `/explore?${updateInputParam}`);
+            navigate(`/explore?${updateInputParam}`, { replace: true });
+          }, 0);
+        }
+
+        console.log(navInput);         // 預 : star 實: star
+        console.log(navCurrentSearch); // 預 : star 實: star
+      }
+
+      setNavInput("");            // 清空輸入框
+
+      console.log(navInput);      // 預 : star 實: star
+
+      setNavInput(navInput = ""); // 清空 navInput 的值
+
+      console.log(navInput);      // 預 : " " 實: " "
+    }
+  }
+
   const handleLogout = () => {
     AuthService.logout(); // {/* 登出會導向首頁-2 */} - 清空 local storage
     window.alert("登出成功!現在您會被導向到首頁...");
     setCurrentUser(null);
   }
 
-
   return (
-    // <div>
-    //   <nav className="navbar navbar-expand-lg navbar-light bg-light">
-    //     <div className="container-fluid">
-    //       <div className="collapse navbar-collapse" id="navbarNav">
-    //         <ul className="navbar-nav">
-    //           {/* 以下只有 currentUser 存在 "JWT"，才可以看到頁面 */}
-    //           {/* 首頁、購物車 無論是否有 "JWT"，都可以看到頁面 */}
-    //           <li className="nav-item">
-    //             <Link className="nav-link active" to="/">首頁</Link>
-    //           </li>
-
-    //           {!currentUser && (
-    //             <li className="nav-item">
-    //               <Link className="nav-link" to="/register">註冊</Link>
-    //             </li>
-    //           )}
-
-    //           {!currentUser && (
-    //             <li className="nav-item">
-    //               <Link className="nav-link" to="/login">登入</Link>
-    //             </li>
-    //           )}
-
-    //           {currentUser && (
-    //             // {/* 登出會導向首頁-1 */}
-    //             <li className="nav-item">
-    //               <Link onClick={handleLogout} className="nav-link" to="/">登出</Link>  
-    //             </li>
-    //           )} 
-
-    //           {currentUser && (
-    //             <li className="nav-item">
-    //               <Link className="nav-link" to="/profile">會員專區</Link>  
-    //             </li>
-    //           )} 
-              
-    //           <li className="nav-item">
-    //             <Link className="nav-link" to="/cart">購物車</Link>  
-    //           </li>
-
-    //           {currentUser && (
-    //             <li className="nav-item">
-    //               <Link className="nav-link" to="/checkout">審核訂單</Link>  
-    //             </li>
-    //           )}              
-
-    //         </ul>
-    //       </div>
-    //     </div>
-
-    //   </nav>
-
-      
-    // </div>
-
-    // 定稿
     <div className="nav-scroller py-0 border-bottom">
       <nav className="nav row flex-nowrap justify-content-between align-items-center m-0">
         <ul className="left col-4 pt-1 d-flex align-items-center mb-1">
           {/* <!-- 指南針和文字 --> */}
           <li className="d-flex justify-content-center align-items-center">
-            <Link className="nav-link link-secondary text-decoration-none d-flex align-items-center" to="/imageGrid" href="#" aria-label="Explore">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="me-1" role="img" viewBox="0 0 24 24" transform="rotate(45)">
+            <Link className="nav-link link-secondary text-decoration-none d-flex align-items-center" to="/explore" aria-label="Explore">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="me-1" role="img" viewBox="0 0 24 24" transform="rotate(45)">
                 <title>Explore</title>
                 <circle cx="12" cy="12" r="10" />
                 <path d="M12 6l3.5 8.5L12 12l-3.5 2.5L12 6z" />
@@ -85,8 +127,8 @@ const Nav = ({ currentUser, setCurrentUser }) => {
 
           {/* <!-- 放大鏡圖示和文字 "Search" --> */}
           <li className="d-flex justify-content-center align-items-center ms-3">
-            <a className="link-secondary text-decoration-none d-flex align-items-center" data-bs-toggle="collapse" href="#searchInput" role="button" aria-expanded="false" aria-controls="searchInput">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="me-1" role="img" viewBox="0 0 24 24">
+            <a className="link-secondary text-decoration-none d-flex align-items-center" href="#searchInput" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="searchInput">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="me-1" role="img" viewBox="0 0 24 24">
                 <title>Search</title>
                 <circle cx="10.5" cy="10.5" r="7.5"/>
                 <path d="M21 21l-5.2-5.2"/>
@@ -97,7 +139,7 @@ const Nav = ({ currentUser, setCurrentUser }) => {
 
           {/* <!-- 可折疊的輸入框 --> */}
           <div className="collapse collapse-horizontal ms-2" id="searchInput">
-            <input className="form-control" type="text" placeholder="Search..." />
+            <input onChange={handleNavInput} onKeyDown={handleNavKeyDown} value={navInput} className="form-control bg-white" type="text" placeholder="Search..." />
           </div>
         </ul>
 
@@ -111,8 +153,8 @@ const Nav = ({ currentUser, setCurrentUser }) => {
         <ul className="right col-4 d-flex justify-content-end align-items-center mb-1">
           {/* <!-- Cart --> */}
           <li className="d-flex justify-content-center align-items-center">
-            <Link className="nav-link" to="/cart" class="link-secondary text-decoration-none d-flex align-items-center" href="#" aria-label="Cart">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="me-1" role="img" viewBox="0 0 24 24">
+            <Link className="nav-link link-secondary text-decoration-none d-flex align-items-center" to="/cart" href="#" aria-label="Cart">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="me-1" role="img" viewBox="0 0 24 24">
                 <title>Cart</title>
                 <circle cx="9" cy="21" r="1" />
                 <circle cx="20" cy="21" r="1" />
@@ -124,8 +166,8 @@ const Nav = ({ currentUser, setCurrentUser }) => {
 
           {/* <!-- Heart --> */}
           <li className="d-flex justify-content-center align-items-center mx-3">
-            <Link className="nav-link" to="/favorites" class="link-secondary text-decoration-none d-flex align-items-center" href="#" aria-label="Heart">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="me-1" role="img" viewBox="0 0 24 24">
+            <Link className="nav-link link-secondary text-decoration-none d-flex align-items-center" to="/favorites" href="#" aria-label="Heart">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="me-1" role="img" viewBox="0 0 24 24">
                 <title>Heart</title>
                 <path d="M12 21c-4.8-4.5-8-7.7-8-11.5 0-2.5 2-4.5 4.5-4.5 1.7 0 3.2 1 4 2.5 0.8-1.5 2.3-2.5 4-2.5 2.5 0 4.5 2 4.5 4.5 0 3.8-3.2 7-8 11.5z"/>
               </svg>
@@ -136,7 +178,7 @@ const Nav = ({ currentUser, setCurrentUser }) => {
           {/* <!-- User Icon, Account Text, and Collapsible Menu --> */}
           <li className="account d-flex justify-content-center align-items-center position-relative">
             <Link className="link-secondary text-decoration-none d-flex align-items-center" to="#" data-bs-toggle="collapse" data-bs-target="#accountMenu" aria-expanded="false" aria-controls="accountMenu">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="me-1" role="img" viewBox="0 0 24 24">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="me-1" role="img" viewBox="0 0 24 24">
                 <circle cx="12" cy="8" r="4" />
                 <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
               </svg>

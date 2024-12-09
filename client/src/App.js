@@ -6,7 +6,7 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Profile from './components/Profile';
 
-import ImageGrid from './components/ImageGrid';
+import Explore from './pages/Explore';
 import Favorites from './components/Favorites';
 
 import Cart from './components/Cart';
@@ -18,8 +18,6 @@ import './styles/style.css';
 function App() {
   let [currentUser, setCurrentUser] = useState(AuthService.getCurrentUser());
 
-  
-
   return (
     <BrowserRouter>
       <Routes>
@@ -30,8 +28,7 @@ function App() {
           <Route path="profile" element={<Profile currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
           <Route path="cart" element={<Cart />} />
           <Route path="checkout" element={<Checkout currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
-          
-          <Route path="imageGrid" element={<ImageGrid currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
+          <Route path="explore" element={<Explore currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
           <Route path="favorites" element={<Favorites currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
         </Route>
       </Routes>

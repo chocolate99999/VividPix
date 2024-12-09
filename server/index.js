@@ -10,11 +10,6 @@ const passport  = require('passport');
 require('./config/passport')(passport);
 const cors = require('cors');
 
-// 小老弟
-// const jwt = require('jsonwebtoken');
-// const stripe = require('stripe')('your-stripe-secret-key');
-
-
 // Connecting to MongoDB
 mongoose
   // .connect('mongodb://localhost:27017/vividpix', {

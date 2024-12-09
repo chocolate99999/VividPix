@@ -1,6 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate('/explore'); 
+  };
+
   return (
     <main id="carouselExampleFade" className="carousel slide carousel-fade position-relative" data-bs-ride="carousel" data-bs-pause="false">
       {/* <div className="container py-4">
@@ -52,7 +59,7 @@ const Home = () => {
         {/* <!-- 文字標題 --> */}
         <div className="carousel-caption d-flex justify-content-center align-items-center position-absolute top-0 start-0 w-100 h-100 z-3 flex-column">
           <h1 className="text-white text-nowrap fw-semibold text-shadow">Seeking the beautiful things in life.</h1>
-          <button type="button" className="btn btn-custom btn-lg mt-3">EXPLORE NOW</button>
+          <button onClick={handleNavigate} type="button" className="btn btn-custom btn-lg mt-3">EXPLORE NOW</button>
         </div>
 
         {/* <!-- 圖片區 --> */}

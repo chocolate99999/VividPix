@@ -5,6 +5,10 @@
   box-sizing: border-box;
 }
 
+body {
+  overflow-x: hidden;
+}
+
 main .carousel-inner .carousel-caption .text-shadow {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 添加陰影 */
 }
@@ -134,4 +138,10 @@ nav ul.right .account:hover .dropdown-menu {
 /* 自動模式根據系統設定切換 */
 [data-bs-theme=auto] .logo {
   filter: invert(50%); /* 過渡效果，根據需要調整 */
+}
+
+.imageContainer {
+  display: block;
+  padding: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }/*# sourceMappingURL=style.css.map */
