@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from 'axios';
 
 import Search from '../components/Search';
-import Picture from '../components/Picture';
+import Pictures from '../components/Pictures';
 
 const Explore = () => {
   let [input, setInput] = useState("");
@@ -192,7 +192,7 @@ const Explore = () => {
       <div className="pictures row justify-content-center g-3">
         {
           data && data.map((d) => {
-            return <Picture data={d} key={d.id}/>
+            return <Pictures data={d} key={d.id}/>
           })
         }
       </div>

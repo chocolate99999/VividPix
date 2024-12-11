@@ -7,6 +7,8 @@ import Login from './components/Login';
 import Profile from './components/Profile';
 
 import Explore from './pages/Explore';
+import Product from './pages/Product';
+
 import Favorites from './components/Favorites';
 
 import Cart from './components/Cart';
@@ -29,6 +31,7 @@ function App() {
           <Route path="cart" element={<Cart />} />
           <Route path="checkout" element={<Checkout currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
           <Route path="explore" element={<Explore currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
+          <Route path="/product/:id" element={<Product currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
           <Route path="favorites" element={<Favorites currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
         </Route>
       </Routes>
