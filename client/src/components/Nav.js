@@ -4,7 +4,7 @@ import AuthService from '../services/auth.service';
 
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-const Nav = ({ currentUser, setCurrentUser }) => {
+const Nav = ({ currentUser, setCurrentUser, cartCount }) => {  // 接收 cartCount 作為 props
   const navigate = useNavigate();
   let [input, setInput] = useState("");
   let [currentSearch, setCurrentSearch] = useState(""); 
@@ -160,7 +160,7 @@ const Nav = ({ currentUser, setCurrentUser }) => {
                 <circle cx="20" cy="21" r="1" />
                 <path d="M1 1h4l2.68 13.39a1 1 0 0 0 .99.79h9.72a1 1 0 0 0 .98-.79L23 6H6" />
               </svg>
-              <span>Cart</span>
+              <span>Cart({cartCount})</span>  {/* 顯示購物車項目數量 */}
             </Link>
           </li>
 
