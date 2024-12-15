@@ -3,71 +3,45 @@ const { Schema } = mongoose;
 
 // 建立結帳清單模式 (Schema)
 const checkoutSchema = new Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',  // 參照使用者模型
-    required: true
+  prime: {
+    type: String,
+    required: true, // Prime 是支付所需的重要欄位
   },
-  cart: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Cart',  // 參照購物車模型
-    required: true
-  },
-  items: [{
-    image: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Image',  // 參照圖片模型
-      required: true
-    },
-    quantity: {
+  order: {
+    photoID: {
       type: Number,
-      required: true,
-      min: 1
+      required: true, // 照片 ID
+    },
+    photoTitle: {
+      type: String,
+      required: true, // 照片標題
     },
     price: {
       type: Number,
-      required: true,
-      min: 0
-    }
-  }],
-  totalAmount: {
-    type: Number,
-    required: true,
-    min: 0
-  },
-  paymentStatus: {
-    type: String,
-    enum: ['Pending', 'Paid', 'Failed'],  // 紀錄支付狀態
-    default: 'Pending'
-  },
-  paymentMethod: {
-    type: String,
-    enum: ['Credit Card', 'PayPal', 'Bank Transfer'],  // 支付方式
-    required: true
-  },
-  billingAddress: {
-    type: String,
-    required: true
-  },
-  shippingAddress: {
-    type: String,
-    required: true
+      required: true, // 照片價格
+      min: 0, // 價格不得低於 0
+    },
   },
   transactionId: {
     type: String,
-    unique: true  // 儲存支付交易 ID
+    unique: true, // 儲存支付交易 ID，保證唯一性
+  },
+  paymentStatus: {
+    type: String,
+    enum: ['Pending', 'Paid', 'Failed'], // 支付狀態
+    default: 'Pending',
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now, // 自動生成結帳時間
   },
   updatedAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now, // 自動生成更新時間
+  },
 });
 
-// 在儲存之前更新 updatedAt
+// 在儲存之前自動更新 `updatedAt`
 checkoutSchema.pre('save', function (next) {
   this.updatedAt = Date.now();
   next();

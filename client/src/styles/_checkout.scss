@@ -1,0 +1,12 @@
+.itemBox { 
+  display: flex;
+  .form-label {
+    margin-right: 5px;
+  }
+  .form-control {
+    width: 185px;
+    height: 30px;
+    margin-top: -3px;
+  }
+}
+

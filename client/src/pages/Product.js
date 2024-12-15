@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import AuthService from '../services/auth.service'; // 引入 AuthService
 
 const Product = ({ currentUser, setCartCount }) => {  // 加入 setCartCount 來更新購物車數量
   const { id: productId } = useParams(); // 從網址中抓取 ID
@@ -17,7 +16,7 @@ const Product = ({ currentUser, setCartCount }) => {  // 加入 setCartCount 來
     try {
       const response = await axios.get(getPictureURL, {
         headers: {
-          // Authorization: PEXELS_API_KEY, // 使用共享的 API Key [小老弟提供 code]
+          // Authorization: PEXELS_API_KEY, // 使用共享的 API Key [little code]
           Authorization: auth, // 使用共享的 API Key
         },
       });
@@ -36,11 +35,13 @@ const Product = ({ currentUser, setCartCount }) => {  // 加入 setCartCount 來
     }
   }, [productId]);
 
-  const handleBuyNow = () => {
+  const handleBuyNow = async () => {
     if (currentUser) {
+      await handleAddToCart(productId);
       // 已登入，導向 Cart 頁面
       navigate("/cart");
     } else {
+      await handleAddToCart(productId);
       // 未登入，導向 Login 頁面
       navigate("/login");
     }
@@ -58,15 +59,17 @@ const Product = ({ currentUser, setCartCount }) => {  // 加入 setCartCount 來
   
       // 獲取圖片數據
       const pictureData = response.data;
+      console.log(pictureData); // {}
   
       // 從 localStorage 中取得現有的購物車訂單資料
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const cart = JSON.parse(localStorage.getItem('cart'));
+      console.log(cart); // []
       
       // 檢查商品是否已經存在於購物車
       const isAlreadyInCart = cart.some((item) => item.id === pictureData.id);
   
       if (isAlreadyInCart) {
-        // alert('This item is already in your cart.');
+        alert('This item is already in your cart.');
         return; // 如果已存在，則不再新增
       }
   
@@ -128,7 +131,7 @@ const Product = ({ currentUser, setCartCount }) => {  // 加入 setCartCount 來
             </p>
           </div>
           <div className="d-flex justify-content-between mt-3" style={{ gap: "20px" }}>
-            <button className="btn btn-primary btn-lg" style={{ width: "200px" }} onClick={handleBuyNow}>Buy now</button>
+            <button className="btn btn-primary btn-lg" style={{ width: "200px" }} onClick={() => handleBuyNow()}>Buy now</button>
             <button className="btn btn-secondary btn-lg" style={{ width: "200px" }} onClick={() => handleAddToCart(productId)}>Add to cart</button>
           </div>
         </div>

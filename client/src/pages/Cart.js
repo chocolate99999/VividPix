@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Cart = ({ currentUser, setCurrentUser,setCartCount }) => {
+const Cart = ({ setCartCount }) => {
   const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();  // 使用 useNavigate
 
   useEffect(() => {
+    console.log("[ DBG] Cart useEffect");    
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setCartItems(storedCart);
     setCartCount(storedCart.length); // 更新 cartCount
@@ -23,9 +24,63 @@ const Cart = ({ currentUser, setCurrentUser,setCartCount }) => {
     return cartItems.length * 12; // 假設每張圖片價格為 $12
   };
 
+  // 函數：將 cartSummary 加入 localStorage 的 'user' 物件中的 'cart' 屬性
+  const pendingPayOrder = (cartSummary) => { 
+
+    // 取得 'user' 物件並解析
+    let user = JSON.parse(localStorage.getItem('user'));
+    console.log(user);
+    console.log(user.user);
+
+    // Clear local storage
+    user.user.cart=[];
+    localStorage.setItem('user', JSON.stringify(user));
+    console.log(user.user);
+
+    //檢查 'cart' 屬性是否存在且是陣列
+    if (user && Array.isArray(user.user.cart)) 
+    {
+      // 將 cartSummary 加入 'cart' 陣列
+      user.user.cart.push(cartSummary);
+      console.log(cartSummary);
+      console.log(user.user.cart);
+      
+      // 清空 'cart' 陣列 // 測試後清空用
+      // user.cart = [];
+      // delete user.cart;
+    } 
+
+    // 更新回 'user' 物件到 localStorage
+    localStorage.setItem('user', JSON.stringify(user));
+  };
+
   // 點擊按鈕後跳轉到 Checkout 頁面
   const handleCheckout = () => {
-    navigate("/checkout");  // 跳轉到 Checkout 頁面
+    console.clear();// DBg
+    
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if (!user) {
+      // 如果 'user' 不存在，導向登入頁面
+      navigate('/login');
+    } 
+    else {
+      // 將購物車資料統整為新訂單
+      const cartSummary = {
+        "cartItems"  : cartItems.map(item => ({
+        "photoID"    : item.id,
+        "photoTitle" : item.alt,
+        "photoUrl"   : item.src.original,
+        "price"      : 12 // 每個商品的固定價格
+      })),
+        "totalPrice" : cartItems.length * 12 // 總價格計算公式
+      };
+
+      console.log(cartSummary);
+      pendingPayOrder(cartSummary);
+
+      navigate("/checkout");  // 跳轉到 Checkout 頁面
+    }
   };
 
   return (

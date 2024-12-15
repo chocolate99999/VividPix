@@ -17,9 +17,9 @@ const Nav = ({ currentUser, setCurrentUser, cartCount }) => {  // 接收 cartCou
   };
 
   let addQueryParam = (key, value) => {   
-    console.warn("[Neil-DBG] 2");
+    console.warn("[ DBG] 2");
     searchParams.set(key, value);
-    console.warn("[Neil-DBG] 3");
+    console.warn("[ DBG] 3");
     setSearchParams(searchParams); // 更新 URL
     return searchParams.toString();
   }

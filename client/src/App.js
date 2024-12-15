@@ -8,11 +8,11 @@ import Profile from './components/Profile';
 
 import Explore from './pages/Explore';
 import Product from './pages/Product';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+import ThankYou from './pages/ThankYou';
 
 import Favorites from './components/Favorites';
-
-import Cart from './components/Cart';
-import Checkout from './components/Checkout';
 import AuthService from './services/auth.service';
 
 import './styles/style.css';
@@ -40,7 +40,8 @@ function App() {
           <Route path="explore" element={<Explore currentUser={currentUser} setCurrentUser={setCurrentUser} />} />          
           <Route path="product/:id" element={<Product currentUser={currentUser} setCurrentUser={setCurrentUser} setCartCount={setCartCount} />} />
           <Route path="cart" element={<Cart currentUser={currentUser} setCurrentUser={setCurrentUser} setCartCount={setCartCount} />} />
-          <Route path="checkout" element={<Checkout currentUser={currentUser} setCurrentUser={setCurrentUser} />} />          
+          <Route path="checkout" element={<Checkout currentUser={currentUser} setCurrentUser={setCurrentUser} setCartCount={setCartCount} />} />          
+          <Route path="thankYou" element={<ThankYou currentUser={currentUser} setCurrentUser={setCurrentUser} />} />          
           <Route path="favorites" element={<Favorites currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
         </Route>
       </Routes>
