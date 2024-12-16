@@ -125,7 +125,7 @@ const Checkout = ({ currentUser, setCartCount }) => {
         );
     
         const data = response.data;
-        console.log("[ DBG] response.data:",response.data);
+        console.log("[DBG] response.data:",response.data);
         if (response.data.message === "Pay Successful") {
           alert("付款成功！");
 

@@ -1,39 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import ApiService from '../services/api.service'; 
 
-const Product = ({ currentUser, setCartCount }) => {  // 加入 setCartCount 來更新購物車數量
+const Product = ({ currentUser, setCartCount, apiKey }) => {  // 加入 setCartCount 來更新購物車數量
   const { id: productId } = useParams(); // 從網址中抓取 ID
   const navigate = useNavigate(); 
   const [picture, setPicture] = useState(null); // 圖片資料
   const [loading, setLoading] = useState(true); // 載入狀態
   const [error, setError] = useState(null); // 錯誤訊息
-  const auth = 'A9hLA30p9pska7Hy4vKOSygOggWwxMKaMJoZJxNLZHrcO6XPC9WK9pmv';
 
   // 獲取圖片數據
   const fetchPicture = async (id) => {
-    const getPictureURL = `https://api.pexels.com/v1/photos/${id}`;
     try {
-      const response = await axios.get(getPictureURL, {
-        headers: {
-          // Authorization: PEXELS_API_KEY, // 使用共享的 API Key [little code]
-          Authorization: auth, // 使用共享的 API Key
-        },
-      });
-      setPicture(response.data); // 儲存 API 返回的圖片數據
+      const photo = await ApiService.getPhotoById(id, apiKey); // 呼叫 getPhotoById
+      setPicture(photo); // 設置圖片資料
     } catch (err) {
       setError(err.message); // 捕捉錯誤
     } finally {
       setLoading(false); // 請求結束後更新載入狀態
     }
   };
-
-  // 當 productId 改變時，重新獲取圖片數據
-  useEffect(() => {
-    if (productId) {
-      fetchPicture(productId);
-    }
-  }, [productId]);
 
   const handleBuyNow = async () => {
     if (currentUser) {
@@ -52,18 +39,14 @@ const Product = ({ currentUser, setCartCount }) => {  // 加入 setCartCount 來
     try {
       const getPictureURL = `https://api.pexels.com/v1/photos/${id}`;
       const response = await axios.get(getPictureURL, {
-        headers: {
-          Authorization: auth, // 使用您的 API Key
-        },
+        headers: { Authorization: apiKey },
       });
   
       // 獲取圖片數據
       const pictureData = response.data;
-      console.log(pictureData); // {}
   
       // 從 localStorage 中取得現有的購物車訂單資料
-      const cart = JSON.parse(localStorage.getItem('cart'));
-      console.log(cart); // []
+      const cart = JSON.parse(localStorage.getItem('cart'))|| []; // 如果為 null，則初始化為空陣列
       
       // 檢查商品是否已經存在於購物車
       const isAlreadyInCart = cart.some((item) => item.id === pictureData.id);
@@ -88,16 +71,23 @@ const Product = ({ currentUser, setCartCount }) => {  // 加入 setCartCount 來
     }
   };
 
+  // 當 productId 改變時，重新獲取圖片數據
+  useEffect(() => {
+    if (productId) {
+      fetchPicture(productId);
+    }
+  }, [productId]);
+
   // 載入中顯示
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="loading-spinner">Loading...</div>;
   }
 
   // 錯誤處理
   if (error) {
-    return <div>An error occurred:{error}</div>;
+    return <div className="error-message">An error occurred: {error}</div>;
   }
-  
+
   return (
     <div className="container mt-5">
       <div className="row">

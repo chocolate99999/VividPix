@@ -5,8 +5,7 @@ const Cart = ({ setCartCount }) => {
   const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();  // 使用 useNavigate
 
-  useEffect(() => {
-    console.log("[ DBG] Cart useEffect");    
+  useEffect(() => {  
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setCartItems(storedCart);
     setCartCount(storedCart.length); // 更新 cartCount
@@ -56,7 +55,6 @@ const Cart = ({ setCartCount }) => {
 
   // 點擊按鈕後跳轉到 Checkout 頁面
   const handleCheckout = () => {
-    console.clear();// DBg
     
     const user = JSON.parse(localStorage.getItem('user'));
 

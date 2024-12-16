@@ -5,7 +5,9 @@ import axios from 'axios';
 import Search from '../components/Search';
 import Pictures from '../components/Pictures';
 
-const Explore = () => {
+import ApiService from '../services/api.service'; 
+
+const Explore = ({ apiKey }) => {
   let [input, setInput] = useState("");
   let [data, setData]   = useState(null);
   let [page, setPage]   = useState(1);
@@ -14,11 +16,10 @@ const Explore = () => {
   let [searchParams, setSearchParams]         = useSearchParams();
   
   const navigate              = useNavigate();
-  const auth                  = 'A9hLA30p9pska7Hy4vKOSygOggWwxMKaMJoZJxNLZHrcO6XPC9WK9pmv';
   const initialURL            = `https://api.pexels.com/v1/curated?page=1&per_page=16`;
   const searchURL             = `https://api.pexels.com/v1/search?query=${input}&page=1&per_page=16`;
   const searchQueryNoValueURL = `https://api.pexels.com/v1/search?query=&page=1&per_page=16`; 
-  
+
   let checkQueryParams  = () => {
     const urlInputParam = searchParams.get("input");
     return urlInputParam;
@@ -33,19 +34,36 @@ const Explore = () => {
     navigate(`/explore`, { replace: true });
   };
 
+  // 發送搜尋請求
   const search = async (url) => {
-    if (url === searchQueryNoValueURL)
+    if (url === searchQueryNoValueURL) {
+      console.warn('Invalid URL or empty query!');
       return;
-    
-    let result = await axios.get(url, {
-      headers: { Authorization: auth },
-    });
+    }
 
-    console.log("input :" , input); // " "
-    console.log("currentSearch : ", currentSearch); // " "
-
-    setData(result.data.photos);
+    try {
+      const photos = await ApiService.searchPhotos(url, apiKey); // 使用 API Key 發送請求
+      setData(photos); // 儲存搜尋結果
+    } 
+    catch (error) {
+      console.error('Error during search:', error);
+    }
   };
+
+  // [原本]
+  // const search = async (url) => {
+  //   if (url === searchQueryNoValueURL)
+  //     return;
+    
+  //   let result = await axios.get(url, {
+  //     headers: { Authorization: auth },
+  //   });
+
+  //   console.log("input :" , input); // " "
+  //   console.log("currentSearch : ", currentSearch); // " "
+
+  //   setData(result.data.photos);
+  // };
 
   const exploreSearch = async () => {
     if (urlInputParam) {
@@ -123,7 +141,7 @@ const Explore = () => {
     }
 
     let result = await axios.get(newURL, {
-      headers: { Authorization: auth },
+      headers: { Authorization: apiKey },
     });
 
     setData(data.concat(result.data.photos));
@@ -131,25 +149,45 @@ const Explore = () => {
     console.log("currentSearch :", currentSearch); // " "
   };
 
+  // 獲取 API Key 從後端
+  // useEffect(() => {
+  //   const fetchApiKey = async () => {
+  //     try {
+  //       const key = await apiService.getApiKey();
+  //       if (key) {
+  //         setApiKey(key);
+  //       } else {
+  //         console.error("Failed to fetch API Key");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching API Key:", error);
+  //     }
+  //   };
+  
+  //   fetchApiKey();
+  // }, []); // 僅在首次渲染時執行
+  
+  // 確保 apiKey 存在後執行相關邏輯
   useEffect(() => {
+    if (apiKey) {
+      if(urlInputParam){
+        console.log("urlInputParam :", urlInputParam);        // 預: cat 實: cat
+        search(`https://api.pexels.com/v1/search?query=${urlInputParam}&page=1&per_page=16`);
+        setNavCurrentSearch(navCurrentSearch = urlInputParam);
+        console.log("navCurrentSearch", navCurrentSearch);    // 預 : cat 實: cat
+      } 
+      else{
+        search(initialURL);
+        // setCurrentSearch("");
+        // setNavCurrentSearch("");
 
-    if(urlInputParam){
-      console.log("urlInputParam :", urlInputParam);        // 預: cat 實: cat
-      search(`https://api.pexels.com/v1/search?query=${urlInputParam}&page=1&per_page=16`);
-      setNavCurrentSearch(navCurrentSearch = urlInputParam);
-      console.log("navCurrentSearch", navCurrentSearch);    // 預 : cat 實: cat
-    } 
-    else{
-      search(initialURL);
-      // setCurrentSearch("");
-      // setNavCurrentSearch("");
-
-      console.log("currentSearch", currentSearch);       // 預期 :  實際: 
-      console.log("navCurrentSearch", navCurrentSearch); // 預期 :  實際:
+        console.log("currentSearch", currentSearch);       // 預期 :  實際: 
+        console.log("navCurrentSearch", navCurrentSearch); // 預期 :  實際:
+      }
     }
-    
-  }, []);
+  }, [apiKey]); // 僅在 apiKey 更新時執行
 
+  
   return (
     <div className="picBox container-fluid p-0 position-relative vh-100">
       {/* <!-- 標題和搜尋區域 --> */}

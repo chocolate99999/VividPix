@@ -2,8 +2,8 @@ const express  = require('express');
 const app      = express();
 const mongoose = require('mongoose');
 const dotenv   = require('dotenv');
-const bcrypt   = require('bcryptjs'); //目前未使用到
 dotenv.config();
+const bcrypt   = require('bcryptjs'); //目前未使用到
 const authRoute = require('./routes').auth; // jwt - 1
 const cartRoute = require('./routes').cart;
 const passport  = require('passport');
@@ -44,9 +44,13 @@ app.use('/api/cart', passport.authenticate('jwt', { session: false }), cartRoute
 // 只有登入系統的人才能 "結帳" or "點讚"
 // JWT
 
+// 設定 API 路由
+app.get('/api/get-api-key', (req, res) => {
+  const apiKey = process.env.API_KEY;  // 從環境變數中取得 API Key
+  res.json({ apiKey });
+})
 
 // DBG -s 
-
 async function TapPayByPrime(PayData)
 {
   console.log("[ DBG] TapPayByPrime()");
