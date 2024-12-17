@@ -8,6 +8,7 @@ const Checkout = ({ currentUser, setCartCount }) => {
   // const [cartItems, setCartItems] = useState([]);
   const storedCart = JSON.parse(localStorage.getItem("cart"));
   // setCartItems(storedCart);
+  const apiUrl = process.env.REACT_APP_API_URL;
   
   // 初始化 TapPay
   useEffect(() => {
@@ -119,8 +120,8 @@ const Checkout = ({ currentUser, setCartCount }) => {
 
       // 發送 Prime Token 給後端 API
       try {
-        // 使用 axios 發送 POST 請求
-        const response = await axios.post("http://localhost:8080/api/orders", 
+        // 使用 axios 發送 POST 請求 
+        const response = await axios.post(`${apiUrl}/api/orders`, 
           orderData,
         );
     
